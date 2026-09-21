@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import type { PokemonListItem, PokemonListResponse } from "../types/pokemon";
 
 
@@ -39,8 +40,10 @@ export function PokemonList() {
 
         return (
           <li key={p.name}>
-            <img src={imageUrl} alt={p.name} width={96} height={96} />
-            <p>#{id} {p.name}</p>
+            <Link to={`/pokedex/${id}`}>
+              <img src={imageUrl} alt={p.name} width={96} height={96} />
+              <p>#{id} {p.name}</p>
+            </Link>
           </li>
         );
       })}

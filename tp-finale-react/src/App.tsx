@@ -5,7 +5,6 @@ import Home from './pages/Home.tsx'
 import NotFound from './pages/NotFound.tsx'
 import Pokedex from './pages/Pokedex.tsx'
 import PokemonDetails from './pages/PokemonDetails.tsx'
-import { PokemonList } from './components/PokemonList';
 
 function App() {
 	return (
@@ -13,10 +12,6 @@ function App() {
 			<div className="app-shell">
 				<Header />
 				<main className="content">
-					<main style={{ padding: '20px', fontFamily: 'sans-serif' }}>
-      					<h1>Pokédex — Projet React</h1>
-      						<PokemonList />
-    							</main>
 				<Routes>
 					<Route path="/" element={<Home />} />
 					<Route path="/pokedex" element={<Pokedex />} />

@@ -30,13 +30,28 @@ export interface PokemonSprites {
   };
 }
 
+export interface PokemonStatInfo {
+  base_stat: number;
+  stat: {
+    name: string;
+  };
+}
+
+export interface PokemonAbilityInfo {
+  ability: {
+    name: string;
+  };
+}
+
 
 export interface PokemonDetail {
-  url: string;
- 
+  id: number;
   name: string;
   height: number;
   weight: number;
   sprites: PokemonSprites;
   types: PokemonTypeInfo[];
+  stats: PokemonStatInfo[];
+  abilities: PokemonAbilityInfo[];
+  moves: { move: { name: string } }[];
 }
