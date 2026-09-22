@@ -9,7 +9,7 @@ function getPokemonId(url: string): string {
 }
 
 
-export function PokemonList({ query = '' }: { query?: string }) {
+export function PokemonList({ query = '', type = '' }: { query?: string; type?: string }) {
   const [pokemons, setPokemons] = useState<PokemonListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -21,7 +21,21 @@ export function PokemonList({ query = '' }: { query?: string }) {
         if (!res.ok) throw new Error('Erreur chargement');
         return res.json();
       })
-      .then((data: PokemonListResponse) => setPokemons(data.results))
+      .then(async (data: PokemonListResponse) => {
+        const pokemonsWithTypes = await Promise.all(
+          data.results.map(async (pokemon) => {
+            const response = await fetch(pokemon.url);
+            const details = await response.json();
+
+            return {
+              ...pokemon,
+              types: details.types.map((pokemonType: { type: { name: string } }) => pokemonType.type.name),
+            };
+          })
+        );
+
+        setPokemons(pokemonsWithTypes);
+      })
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
   }, []);
@@ -31,7 +45,8 @@ export function PokemonList({ query = '' }: { query?: string }) {
   if (error) return <p>{error}</p>;
 
   const filteredPokemons = pokemons.filter((pokemon) =>
-    pokemon.name.toLowerCase().includes(query.toLowerCase())
+    pokemon.name.toLowerCase().includes(query.toLowerCase()) &&
+    (type === '' || pokemon.types?.includes(type))
   );
 
   return (
