@@ -1,9 +1,11 @@
 import { Link, useParams } from 'react-router-dom'
 import { usePokemonDetails } from '../hooks/usePokemonDetails'
+import { useFavorites } from '../hooks/useFavorites'
 
 export default function PokemonDetails() {
   const { id } = useParams()
   const { pokemon, error } = usePokemonDetails(id)
+  const { favorites, toggleFavorite } = useFavorites()
 
   if (error) return <section><p>{error}</p><Link to="/pokedex">Retour au Pokédex</Link></section>
   if (!pokemon) return <section><p>Chargement...</p></section>
@@ -11,6 +13,9 @@ export default function PokemonDetails() {
   return (
     <section>
       <h1>#{pokemon.id} {pokemon.name}</h1>
+      <button onClick={() => toggleFavorite(String(pokemon.id))}>
+        {favorites.includes(String(pokemon.id)) ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+      </button>
       <img src={pokemon.sprites.other?.['official-artwork']?.front_default ?? pokemon.sprites.front_default ?? ''} alt={pokemon.name} width={240} />
       <p>Types : {pokemon.types.map(({ type }) => type.name).join(', ')}</p>
       <p>Taille : {pokemon.height / 10} m</p>
