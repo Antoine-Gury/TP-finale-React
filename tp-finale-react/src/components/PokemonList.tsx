@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import type { PokemonListItem, PokemonListResponse } from "../types/pokemon";
+import { usePokemonList } from '../hooks/usePokemonList'
 
 
 function getPokemonId(url: string): string {
@@ -10,35 +9,7 @@ function getPokemonId(url: string): string {
 
 
 export function PokemonList({ query = '', type = '' }: { query?: string; type?: string }) {
-  const [pokemons, setPokemons] = useState<PokemonListItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-
-  useEffect(() => {
-    fetch('https://pokeapi.co/api/v2/pokemon?limit=50&offset=0')
-      .then((res) => {
-        if (!res.ok) throw new Error('Erreur chargement');
-        return res.json();
-      })
-      .then(async (data: PokemonListResponse) => {
-        const pokemonsWithTypes = await Promise.all(
-          data.results.map(async (pokemon) => {
-            const response = await fetch(pokemon.url);
-            const details = await response.json();
-
-            return {
-              ...pokemon,
-              types: details.types.map((pokemonType: { type: { name: string } }) => pokemonType.type.name),
-            };
-          })
-        );
-
-        setPokemons(pokemonsWithTypes);
-      })
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
-  }, []);
+  const { pokemons, loading, error } = usePokemonList()
 
 
   if (loading) return <p>Chargement...</p>;
