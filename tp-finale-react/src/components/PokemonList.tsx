@@ -9,7 +9,7 @@ function getPokemonId(url: string): string {
 }
 
 
-export function PokemonList() {
+export function PokemonList({ query = '' }: { query?: string }) {
   const [pokemons, setPokemons] = useState<PokemonListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -30,10 +30,13 @@ export function PokemonList() {
   if (loading) return <p>Chargement...</p>;
   if (error) return <p>{error}</p>;
 
+  const filteredPokemons = pokemons.filter((pokemon) =>
+    pokemon.name.toLowerCase().includes(query.toLowerCase())
+  );
 
   return (
     <ul>
-      {pokemons.map((p) => {
+      {filteredPokemons.map((p) => {
         const id = getPokemonId(p.url);
         const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
 
