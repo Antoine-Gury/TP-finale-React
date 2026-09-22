@@ -1,23 +1,9 @@
 import { Link, useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
-import type { PokemonDetail } from '../types/pokemon'
+import { usePokemonDetails } from '../hooks/usePokemonDetails'
 
 export default function PokemonDetails() {
   const { id } = useParams()
-  const [pokemon, setPokemon] = useState<PokemonDetail | null>(null)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    if (!id) return
-
-    fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
-      .then((response) => {
-        if (!response.ok) throw new Error('Pokémon introuvable')
-        return response.json()
-      })
-      .then((data: PokemonDetail) => setPokemon(data))
-      .catch((requestError: Error) => setError(requestError.message))
-  }, [id])
+  const { pokemon, error } = usePokemonDetails(id)
 
   if (error) return <section><p>{error}</p><Link to="/pokedex">Retour au Pokédex</Link></section>
   if (!pokemon) return <section><p>Chargement...</p></section>

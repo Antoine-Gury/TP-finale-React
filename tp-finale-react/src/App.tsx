@@ -5,6 +5,7 @@ import Home from './pages/Home.tsx'
 import NotFound from './pages/NotFound.tsx'
 import Pokedex from './pages/Pokedex.tsx'
 import PokemonDetails from './pages/PokemonDetails.tsx'
+import SuggestPokemon from './pages/SuggestPokemon.tsx'
 
 function App() {
 	return (
@@ -16,6 +17,7 @@ function App() {
 					<Route path="/" element={<Home />} />
 					<Route path="/pokedex" element={<Pokedex />} />
 					<Route path="/pokedex/:id" element={<PokemonDetails />} />
+					<Route path="/proposer" element={<SuggestPokemon />} />
 					<Route path="/about" element={<About />} />
 					<Route path="*" element={<NotFound />} />
 				</Routes>
